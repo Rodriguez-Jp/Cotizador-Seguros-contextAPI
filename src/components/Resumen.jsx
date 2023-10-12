@@ -1,15 +1,22 @@
+import { useMemo, useRef } from "react";
 import useCotizadorContext from "../hooks/useCotizadorContext";
 import { MARCAS, PLANES } from "../constants";
 
 export default function Resumen() {
   const { datos, precioFinal } = useCotizadorContext();
   const { marca, year, plan } = datos;
+  const yearRef = useRef(year);
 
-  const [nombreMarca] = MARCAS.filter((m) => m.id === Number(marca));
-  const [nombrePlan] = PLANES.filter((m) => m.id === Number(plan));
+  const [nombreMarca] = useMemo(
+    () => MARCAS.filter((m) => m.id === Number(marca)),
+    [precioFinal]
+  );
+  const [nombrePlan] = useMemo(
+    () => PLANES.filter((m) => m.id === Number(plan)),
+    [precioFinal]
+  );
 
   if (precioFinal === 0) return;
-
   return (
     <>
       <div className="max-w-3xl p-3 mx-auto text-center bg-slate-400 text-slate-50 rounded-lg shadow-xl text-lg">
@@ -18,7 +25,7 @@ export default function Resumen() {
           <span className="font-bold">Marca:</span> {nombreMarca.nombre}
         </p>
         <p className="mt-1">
-          <span className="font-bold">Año:</span> {year}
+          <span className="font-bold">Año:</span> {yearRef.current}
         </p>
         <p className="mt-1">
           <span className="font-bold">Plan:</span> {nombrePlan.nombre}
