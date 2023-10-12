@@ -1,23 +1,42 @@
 import { MARCAS, YEARS, PLANES } from "../constants";
+import toast from "react-hot-toast";
 import { Fragment } from "react";
 import useCotizadorContext from "../hooks/useCotizadorContext";
 
 export default function Formulario() {
-  const { setMarca, setYear, setPlan } = useCotizadorContext();
+  const { datos, handleChangeDatos, cotizarSeguro } = useCotizadorContext();
+
+  function enviarFormulario(e) {
+    e.preventDefault();
+
+    //Valida los campos y en caso de que alguno este vacio envia el Toast
+    const isEmpty = Object.values(datos).some(
+      (value) => value === "" || value === null
+    );
+
+    if (isEmpty) {
+      toast.error("Todos los campos son obligatorios");
+      return;
+    }
+
+    //En caso de pasar la validacion, cotizamos el seguro
+    cotizarSeguro();
+  }
   return (
     <>
-      <form className="p-5">
+      <form className="p-5" onSubmit={enviarFormulario}>
         <div className="flex flex-col">
           <label className="font-semibold uppercase text-lg">Marca</label>
           <select
             name="marca"
             id="marca"
             className="rounded-lg p-2 my-2 text-slate-600"
-            onChange={(e) => setMarca(e.target.value)}
+            onChange={(e) => handleChangeDatos(e)}
+            value={datos.marca}
           >
             <option value="">Seleccione una marca</option>
             {MARCAS.map((marca) => (
-              <option key={marca.id} value={marca.nombre}>
+              <option key={marca.id} value={marca.id}>
                 {marca.nombre}
               </option>
             ))}
@@ -29,7 +48,8 @@ export default function Formulario() {
             name="year"
             id="year"
             className="rounded-lg p-2 my-2 text-slate-600"
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => handleChangeDatos(e)}
+            value={datos.year}
           >
             <option value="">Seleccione el año</option>
             {YEARS.map((year) => (
@@ -51,8 +71,8 @@ export default function Formulario() {
                   type="radio"
                   name="plan"
                   id="plan"
-                  value={plan.nombre}
-                  onChange={() => setPlan(plan.nombre)}
+                  value={plan.id}
+                  onChange={(e) => handleChangeDatos(e)}
                 />
               </Fragment>
             ))}

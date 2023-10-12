@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { CotizadorProvider } from "./context/CotizadorContext";
 import AppSeguro from "./components/AppSeguro";
 
@@ -7,6 +8,7 @@ function App() {
       <CotizadorProvider>
         <AppSeguro />
       </CotizadorProvider>
+      <Toaster />
     </>
   );
 }
