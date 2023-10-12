@@ -9,6 +9,8 @@ const CotizadorProvider = ({ children }) => {
     year: "",
     plan: "",
   });
+  const [precioFinal, setPrecioFinal] = useState(0);
+  const [cotizado, setCotizado] = useState(false);
 
   function handleChangeDatos(e) {
     setDatos({ ...datos, [e.target.name]: Number(e.target.value) });
@@ -38,12 +40,18 @@ const CotizadorProvider = ({ children }) => {
       precioFinal *= 1.3;
     }
 
-    console.log(formatearDinero(precioFinal));
+    //State para saber que se cotizo el seguro -- Spinner
+    setCotizado(true);
+    setTimeout(() => {
+      //Finalizado el calculo lo subimos al state
+      setPrecioFinal(formatearDinero(precioFinal));
+      setCotizado(false);
+    }, 1000);
   }
 
   return (
     <CotizadorContext.Provider
-      value={{ datos, handleChangeDatos, cotizarSeguro }}
+      value={{ datos, handleChangeDatos, cotizarSeguro, precioFinal, cotizado }}
     >
       {children}
     </CotizadorContext.Provider>

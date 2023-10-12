@@ -1,7 +1,8 @@
 import { MARCAS, YEARS, PLANES } from "../constants";
 import toast from "react-hot-toast";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import useCotizadorContext from "../hooks/useCotizadorContext";
+import Spinner from "./Spinner";
 
 export default function Formulario() {
   const { datos, handleChangeDatos, cotizarSeguro } = useCotizadorContext();
@@ -20,6 +21,7 @@ export default function Formulario() {
     }
 
     //En caso de pasar la validacion, cotizamos el seguro
+
     cotizarSeguro();
   }
   return (
